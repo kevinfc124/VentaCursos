@@ -15,7 +15,7 @@
         </div>
     @endif
 
-    <form action="{{ route('cursos.update', $curso) }}" method="POST">
+    <form action="{{ route('cursos.update', $curso) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         
@@ -55,6 +55,14 @@
         <div class="mb-3">
             <label for="horarios" class="form-label">Horarios</label>
             <input type="text" name="horarios" id="horarios" class="form-control" value="{{ $curso->horarios }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="imagen" class="form-label">Imagen (opcional)</label>
+            <input type="file" name="imagen" id="imagen" class="form-control">
+            @if ($curso->imagen)
+                <img src="{{ asset('images/' . $curso->imagen) }}" alt="Imagen del curso" class="img-thumbnail mt-2" style="max-width: 150px;">
+            @endif
         </div>
 
         <button type="submit" class="btn btn-primary">Actualizar Curso</button>

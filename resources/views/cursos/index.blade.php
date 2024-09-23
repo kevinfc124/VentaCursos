@@ -13,6 +13,7 @@
         <table class="table table-bordered">
             <thead class="thead-dark">
                 <tr>
+                    <th>Imagen</th> <!-- Nueva columna para la imagen -->
                     <th>Título</th>
                     <th>Descripción</th>
                     <th>Duración</th>
@@ -26,6 +27,13 @@
             <tbody>
                 @foreach ($cursos as $curso)
                     <tr>
+                        <td>
+                            @if ($curso->imagen)
+                                <img src="{{ asset('images/' . $curso->imagen) }}" alt="{{ $curso->titulo }}" width="100" height="100">
+                            @else
+                                <span>No hay imagen</span>
+                            @endif
+                        </td>
                         <td>{{ $curso->titulo }}</td>
                         <td>{{ $curso->descripcion }}</td>
                         <td>{{ $curso->duracion }} horas</td>

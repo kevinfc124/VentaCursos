@@ -39,13 +39,27 @@ class CursoController extends Controller
             'modalidad' => 'required|string',
             'dias' => 'required|string',
             'horarios' => 'required|string',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validar la imagen
         ]);
-
-        // Crear un nuevo curso
-        Curso::create($request->all());
-
+    
+        $cursoData = $request->all();
+    
+        // Subir la imagen
+        if ($request->hasFile('imagen')) {
+            $fileName = time() . '.' . $request->imagen->extension();
+            $request->imagen->move(public_path('images'), $fileName);
+            $cursoData['imagen'] = $fileName; // Asignar el nombre del archivo a los datos del curso
+        } else {
+            $cursoData['imagen'] = null; // Asegurarse de que no sea nulo si no se sube una imagen
+        }
+    
+        // Crear el curso con los datos
+        Curso::create($cursoData);
+    
         return redirect()->route('cursos.index')->with('success', 'Curso creado con éxito.');
     }
+    
+    
 
     // Mostrar formulario para editar un curso existente
     public function edit($id)
@@ -66,14 +80,30 @@ class CursoController extends Controller
             'modalidad' => 'required|string',
             'dias' => 'required|string',
             'horarios' => 'required|string',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
+    
         $curso = Curso::findOrFail($id);
-        $curso->update($request->all());
-
+    
+        // Verifica si se subió una nueva imagen
+        if ($request->hasFile('imagen')) {
+            // Eliminar la imagen anterior si existe
+            if ($curso->imagen) {
+                \File::delete(public_path('images/' . $curso->imagen));
+            }
+    
+            // Subir la nueva imagen
+            $fileName = time() . '.' . $request->imagen->extension();
+            $request->imagen->move(public_path('images'), $fileName);
+            $curso->imagen = $fileName; // Guardar solo el nombre de la imagen
+        }
+    
+        // Actualizar los demás campos
+        $curso->update($request->except('imagen')); // Excluir el campo imagen
+    
         return redirect()->route('cursos.index')->with('success', 'Curso actualizado con éxito.');
     }
-
+    
     // Eliminar un curso de la base de datos
     public function destroy($id)
     {

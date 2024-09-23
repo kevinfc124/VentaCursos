@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Articulo>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Curso>
  */
 class CursoFactory extends Factory
 {
@@ -24,6 +24,7 @@ class CursoFactory extends Factory
             'modalidad' => $this->faker->randomElement(['presencial', 'online']),
             'dias' => implode(', ', $this->faker->randomElements(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'], 3)), // Selecciona 3 días aleatorios
             'horarios' => $this->faker->time,
+            'imagen' => $this->faker->imageUrl(640, 480, 'education', true, 'curso'), // URL de imagen aleatoria
         ];
     }
 }

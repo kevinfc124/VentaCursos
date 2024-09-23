@@ -20,9 +20,11 @@ return new class extends Migration
             $table->string('modalidad');
             $table->string('dias');
             $table->string('horarios');
+            $table->string('imagen')->nullable(); // Campo para la imagen
             $table->timestamps();
         });
     }
+    
     
     /**
      * Reverse the migrations.
